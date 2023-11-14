@@ -1,0 +1,340 @@
+{% assign available = false %}
+{% assign variantCount = product.options | size %}
+<style>
+.product-info_con {
+margin-top:24px ;
+margin-bottom:0px ;
+}
+.product-info_con +.product-info_con {
+margin-top:0px !important;
+margin-bottom:0px !important;
+}
+
+</style>
+{% if selectedVariant.available and product.available %}
+{% assign available = true %}
+{% endif %}
+<input type="hidden" name="product_id" value="{{ product.id }}" />
+<input type="hidden" name="variant_id" id="selected_variant_id_{{product.id}}" value="{% if selectedVariant.available_quantity > 0 %}{{ selectedVariantId }}{% endif %}" />
+<div class="product-info__body">
+{% assign has_variants = false %}
+{% for block in section.blocks %}
+{% if block.type contains 'shoplazza://apps' %}
+{% render block %}
+{% continue %}
+{% endif %}
+{% case block.type %}
+{% when "title" %}
+<div {{block.shoplaza_attributes}} class="product-info__header tw-pt-[10px] lg:tw-pt-3">
+<h1 class="tw-m-0 tw-text-product-title-color type-heading-font-family tw-text-base lg:tw-text-xl tw-leading-1.3 lg:tw-leading-1.2 tw-opacity-[0.85] tw-break-words {% if block.settings.mobile_product_title_style == 'one_line' %} md:tw-truncate {% elsif block.settings.mobile_product_title_style == 'hide' %} md:tw-hidden {% endif %} product-info__header_title">{{ product.title | escape }}</h1>
+</div>
+{% when "subtitle" %}
+{% if product.brief %}
+<p {{block.shoplaza_attributes}} class="tw-m-0 tw-pt-[10px] lg:tw-pt-4 tw-text-xs tw-leading-1.3 tw-opacity-60 product-info__header_brief">{{ product.brief }}</p>
+{% endif %}
+{% when "price" %}
+{% include 'product_info_price' %}
+{% when "qty" %}
+<div {{block.shoplaza_attributes}} class="tw-pt-6 product-info__qty">
+<div class="lg:tw-body-plus-2 tw-leading-1.3">{{ 'i18n.product.product_detail.qty' | t }}</div>
+<div class="tw-flex tw-h-10 tw-pt-3">
+{% capture qty_class %}
+tw-bg-transparent tw-border tw-border-solid tw-border-[#E6E6E6] tw-m-0 tw-p-0 tw-w-10 tw-cursor-pointer disabled:tw-cursor-default disabled:tw-bg-[#e6e6e6] tw-outline-none tw-flex tw-justify-center tw-items-center product-info__qty_btn
+{% endcapture %}
+{% capture qtyBorderRadius %}
+{% if settings.button_edges == 'round' or settings.button_edges == 'slightly_round' %} tw-rounded-btn {% else %} tw-rounded-[1px] {% endif %}
+{% endcapture %}
+<button data-track="product_minus_quantity" type="button" class="{{qty_class}} {{ qtyBorderRadius }} product-info__qty_decr" data-click="decrease" disabled>{% include 'icon_decrease',icon_class:"tw-text-text-color" %}</button>
+<input class="tw-box-border tw-p-0 tw-w-9 tw-text-center tw-body-plus-2 tw-text-text-color tw-bg-transparent tw-border-0 tw-outline-none form-control product-info__qty_num" id="product_quantity_{{product.id}}" name="quantity" type="text" value="1">
+<button data-track="product_add_quantity" type="button" class="{{qty_class}} {{ qtyBorderRadius }} product-info__qty_incr " data-click="increase">{% include 'icon_increase', icon_class: "tw-text-text-color" %}</button>
+</div>
+</div>
+<!-- test111 -->
+<!-- product add-ons代码 -->
+{% if product.tags contains 'addonproductforjewelry' %}<!-- 如果产品tag包含addonproductforjewelry则展示下面的连带配件 -->
+
+</li>
+</ul>
+{% elsif product.tags contains 'addonproductforcrochwt' %}<!-- 如果产品tag包含addonproductforcrochwt则展示下面的连带配件 -->
+<p style="font-weight: 700;">Add Accessories（check cart if items added）</p>
+<ul style="list-style-type:none;padding: 0px;">
+<li style="display: flex;align-items: center;justify-content: left;padding: 15px 0px;border-top:1px solid #e4e4e4;">
+	<input index="1" class="addordeletecart" addproduct_id="7a0233b5-4322-44b4-bad8-1ee85a252794" addvariant_id="a04c2aa1-bb16-4f12-92ed-af1df0f4de47" style="width:20px;height:20px" type="checkbox">
+	<img style="width: 90px;height: 90px;margin-left: 10px;" src="https://img.staticdj.com/54cc09af44874c45a446892a7acd6b62_1080x.jpg">
+	<div style="margin-left: 10px;">
+		<p>100 Pcs 8MM Plastic Safety Animal Eyes</p>
+		<div>
+			<span style="color:#f00">$5.99</span>
+			<span class="addonviewlarge" style="margin-left: 3px;text-decoration: underline;cursor: pointer;" viewimgsrc="https://img.staticdj.com/54cc09af44874c45a446892a7acd6b62_1080x.jpg">view large</span>
+		</div>
+	</div>
+</li>
+<li style="display: flex;align-items: center;justify-content: left;padding: 15px 0px;border-top:1px solid #e4e4e4;">
+<input index="2" class="addordeletecart" addproduct_id="e58e0f98-d9c5-49ec-b8c9-90d306ba9e1a" addvariant_id="74406502-838b-4283-9faf-2644796ed535" style="width:20px;height:20px" type="checkbox">
+<img style="width: 90px;height: 90px;margin-left: 10px;" src="https://img.staticdj.com/9bc4415bdf3831bf1531b1ec99b19e5f_1080x.jpg">
+<div style="margin-left: 10px;">
+<p>Mewaii® Handmade Crochet Ghost Keychain</p>
+<div>
+<span style="color:#f00">$6.99</span>
+<span class="addonviewlarge" style="margin-left: 3px;text-decoration: underline;cursor: pointer;" viewimgsrc="https://img.staticdj.com/9bc4415bdf3831bf1531b1ec99b19e5f_1080x.jpg">view large</span>
+</div>
+</div>
+</li> 
+<li style="display: flex;align-items: center;justify-content: left;padding: 15px 0px;border-top:1px solid #e4e4e4;">
+<input index="3" class="addordeletecart" addproduct_id="74078c69-7de9-4a1c-b338-0a0dde0a77dc" addvariant_id="800cafc0-7f25-4b98-b511-fc1dc5d1c2b1" style="width:20px;height:20px" type="checkbox">
+<img style="width: 90px;height: 90px;margin-left: 10px;" src="https://img.staticdj.com/5737dc15574407056ffc4670a8c84f74.jpg">
+<div style="margin-left: 10px;">
+<p>1Pc 2.75MM Flower Crochet Hook For Beginners</p>
+<div>
+<span style="color:#f00">$4.99</span>
+<span class="addonviewlarge" style="margin-left: 3px;text-decoration: underline;cursor: pointer;" viewimgsrc="https://img.staticdj.com/5737dc15574407056ffc4670a8c84f74.jpg">view large</span>
+</div>
+</div>
+</li>
+<li style="display: flex;align-items: center;justify-content: left;padding: 15px 0px;border-top:1px solid #e4e4e4;">
+<input index="4" class="addordeletecart" addproduct_id="09819aeb-f959-4213-9004-11242522acdd" addvariant_id="b701b0fe-f7c9-430e-a83f-69a23ff70968" style="width:20px;height:20px" type="checkbox">
+<img style="width: 90px;height: 90px;margin-left: 10px;" src="https://img.staticdj.com/c976c096ceecc0cfa9b850b3098544b1.jpg">
+<div style="margin-left: 10px;">
+<p>Mewaii Yarn Bag For Crochet Supplies</p>
+<div>
+<span style="color:#f00">$7.99</span>
+<span class="addonviewlarge" style="margin-left: 3px;text-decoration: underline;cursor: pointer;" viewimgsrc="https://img.staticdj.com/c976c096ceecc0cfa9b850b3098544b1.jpg">view large</span>
+</div>
+</div>
+</li> 
+</ul>
+
+{% else %}<!-- 如果产品tag不满足以上任何条件则展示下面的连带配件 -->
+<p style="font-weight: 700;">Add Accessories（check cart if items added）</p>
+<ul style="list-style-type:none;padding: 0px;">
+<li style="display: flex;align-items: center;justify-content: left;padding: 15px 0px;border-top:1px solid #e4e4e4;">
+<input index="1" class="addordeletecart" addproduct_id="f468a0ec-e795-44e9-8c86-a908045cda4f" addvariant_id="da0661a1-cef4-4935-b731-5b2b35c806f3" style="width:20px;height:20px" type="checkbox">
+<img style="width: 90px;height: 90px;margin-left: 10px;" src="https://img.staticdj.com/113c3a0a65c1cf7dc58f4ac5727a1fcb.jpeg">
+<div style="margin-left: 10px;">
+<p>1 Pc Collectible Keychain Mystery Bag</p>
+<div>
+<span style="color:#f00">$1.99</span>
+<span class="addonviewlarge" style="margin-left: 3px;text-decoration: underline;cursor: pointer;" viewimgsrc="https://img.staticdj.com/113c3a0a65c1cf7dc58f4ac5727a1fcb.jpeg">view large</span>
+</div>
+</div>
+</li>
+<li style="display: flex;align-items: center;justify-content: left;padding: 15px 0px;border-top:1px solid #e4e4e4;">
+<input index="2" class="addordeletecart" addproduct_id="20cc5b4b-bbc4-46ca-99bf-0cd6c1ac5f37" addvariant_id="211a2d35-7e6e-4bb9-b28e-11c453f38c55" style="width:20px;height:20px" type="checkbox">
+<img style="width: 90px;height: 90px;margin-left: 10px;" src="https://img.staticdj.com/63601acaff881f513e326d98dbe026c0.jpg">
+<div style="margin-left: 10px;">
+<p>Velvet Christmas Gift Bag 14"</p>
+<div>
+<span style="color:#f00">$4.99</span>
+<span class="addonviewlarge" style="margin-left: 3px;text-decoration: underline;cursor: pointer;" viewimgsrc="https://img.staticdj.com/63601acaff881f513e326d98dbe026c0.jpg">view large</span>
+</div>
+</div>
+</li>
+<li style="display: flex;align-items: center;justify-content: left;padding: 15px 0px;border-top:1px solid #e4e4e4;">
+<input index="3" class="addordeletecart" addproduct_id="7072845c-3c47-444d-9af4-4675b9b516c5" addvariant_id="2555c9b5-53d5-475d-b0d3-5d2d780bfdd3" style="width:20px;height:20px" type="checkbox">
+<img style="width: 90px;height: 90px;margin-left: 10px;" src="https://img.staticdj.com/f9b66e9c20e9dd104ad44f66a9677a21.jpg">
+<div style="margin-left: 10px;">
+<p>Mewaii Stuffed Animal Storage Hammock</p>
+<div>
+<span style="color:#f00">$6.99</span>
+<span class="addonviewlarge" style="margin-left: 3px;text-decoration: underline;cursor: pointer;" viewimgsrc="https://img.staticdj.com/f9b66e9c20e9dd104ad44f66a9677a21.jpg">view large</span>
+</div>
+</div>
+</li>
+<li style="display: flex;align-items: center;justify-content: left;padding: 15px 0px;border-top:1px solid #e4e4e4;">
+<input index="4" class="addordeletecart" addproduct_id="43708d79-4eba-4742-8f8c-2d01854ffed8" addvariant_id="2946b8ce-1b72-4f4c-b353-1820c94229e5" style="width:20px;height:20px" type="checkbox">
+<img style="width: 90px;height: 90px;margin-left: 10px;" src="https://img.staticdj.com/a22f9a94c331917330f5a9cbb5a2ffdb.jpg">
+<div style="margin-left: 10px;">
+<p>Adventure & Fluorescent Sticker Set</p>
+<div>
+<span style="color:#f00">$2.99</span>
+<span class="addonviewlarge" style="margin-left: 3px;text-decoration: underline;cursor: pointer;" viewimgsrc="https://img.staticdj.com/a22f9a94c331917330f5a9cbb5a2ffdb.jpg">view large</span>
+</div>
+</div>
+</li>
+</ul>
+{% endif %}
+{% if product.id == '0cf375e5-92d6-4546-8716-f777216cfaa4' %}
+<div id="shoplaza-section-1681120665261" class="shoplaza-section" data-section-id="1681120665261" data-section-type="shoplazza://apps/appparakeet/blocks/app-parakeet/134561071959639622" data-section-style=""><style id='app-parakeet-style'></style>
+	<div id='app-parakeet' data-product-id="0cf375e5-92d6-4546-8716-f777216cfaa4"></div>
+{% endif %}
+	<div style="padding:10px;display:none;text-align: center; position: fixed; left: 50%; margin-left: -160px; top: 50%;margin-top: -160px; background: rgba(0,0,0,0.3); z-index: 999; width: 300px;height:300px" id="addonviewlarge"> 
+		<img id="addonviewlargeimg" style="width: 100%;" src="https://img.staticdj.com/41f6fdb23a3483adf2b76dd08c938bc4.jpeg" />
+		<p onclick="closehughpopup()" style="position: absolute; top: 0px; right: 0px; height: 30px; width: 30px; background-color: #000; color: #fff; line-height: 30px; cursor: pointer; margin: 0px;">x</p> 
+	</div>
+	<div id="viewlargerbackgroung" style="position:fixed;background: rgba(0,0,0,0.3);z-index: 998;width: 100%;height:100%;top:0px;left:0px;display: none;"></div>
+<script>
+$(document).on("click",".addordeletecart",addordeletecarturl);
+$(document).on("click",".addonviewlarge",addonviewlarge);
+var deleteapiurl = "";
+
+function closehughpopup() {
+document.getElementById("addonviewlarge").style.display = "none";
+document.getElementById("viewlargerbackgroung").style.display = "none";
+}
+
+function addordeletecarturl (){
+if (this.checked) {
+$.post(
+"/api/cart",
+{ 
+product_id: this.getAttribute("addproduct_id"),
+variant_id: this.getAttribute("addvariant_id"),
+quantity: "1"
+}
+);
+} else {
+deleteapiurl = '/api/cart/'+ this.getAttribute("addvariant_id");
+$.ajax({
+type: 'delete',
+url: deleteapiurl,
+data: {
+product_id: this.getAttribute("addproduct_id"), 
+variant_id: this.getAttribute("addvariant_id"),
+},
+})
+}
+};
+
+function addonviewlarge (){
+console.log(this.getAttribute("viewimgsrc"))
+document.getElementById("addonviewlarge").style.display = "block";
+document.getElementById("addonviewlargeimg").src = this.getAttribute("viewimgsrc");
+document.getElementById("viewlargerbackgroung").style.display = "block";
+}
+</script>
+
+<!-- end product add-ons代码 -->
+{% when "buy_buttons" %}
+{% if block.settings.show_buy_now or block.settings.show_add or block.settings.show_paypal %}
+<div {{block.shoplaza_attributes}} class="tw-pt-6 lg:tw-pt-[28px] product-info__btn {% unless available %}variant_disabled{% endunless %} tw-space-y-3">
+{% if block.settings.show_add %}
+<button type="button"
+class="tw-box-border tw-relative tw-flex-1 tw-h-[52px] tw-w-full tw-p-0 tw-body-plus-2 type-text-font-family tw-font-semibold tw-outline-none tw-primary-btn tw-rounded-btn {% if isSelectedVariant %} {% unless available %} is-disabled {% endunless %} {% else %} {% unless product.available %} is-disabled {% endunless %} {% endif %} product-info__add-to-cart"
+data-click="addToCart"
+data-track="click" data-track-content="add_to_cart" data-track-source="add_to_cart"
+data-sold-out="{{ 'i18n.product.product_detail.sold_out' | t }}"
+data-on-sale="{{ 'i18n.product.product_detail.add_to_cart' | t }}"
+data-unavailable="{{ 'i18n.products.product.unavailable' | t }}"
+data-switch-variant="{{ 'i18n.product.product_detail.switch_variant' | t }}"
+data-added-to-bag-successfully="{{ 'i18n.product.product_detail.added_to_bag_successfully' | t }}"
+>
+{% if isSelectedVariant %}
+{% if available %}
+{{ 'i18n.product.product_detail.add_to_cart' | t }}{% if settings.enable_btn_price %} - <span class="money">{{ selectedVariant.price | money_with_symbol }}</span>{% endif %}
+{% else %}
+{{ 'i18n.product.product_detail.sold_out' | t }}
+{% endif %}
+{% else %}
+{% if product.available %}
+{{ 'i18n.product.product_detail.add_to_cart' | t }}
+{% else %}
+{{ 'i18n.product.product_detail.sold_out' | t }}
+{% endif %}
+{% endif %}
+</button>
+{% endif %}
+{% if block.settings.show_buy_now %}
+<button
+type="button"
+class="
+tw-box-border tw-relative tw-h-[52px] tw-w-full tw-p-0
+tw-border tw-border-solid tw-border-btn-bg
+tw-bg-btn-text-color tw-text-btn-bg
+tw-body-plus-2 type-text-font-family tw-font-semibold
+tw-outline-none tw-cursor-pointer
+tw-transition-colors tw-duration-300 tw-rounded-btn
+lg:hover:tw-text-btn-text-color lg:hover:tw-bg-btn-bg lg:hover:tw-border-btn-bg
+{% if isSelectedVariant %} {% unless available %} tw-hidden {% endunless %} {% else %} {% unless product.available %} tw-hidden {% endunless %} {% endif %} product-info__buy-now"
+data-click="submit"
+data-track="click" data-track-content="checkout" data-track-source="buy_now"
+>
+{{ 'i18n.product.product_detail.buy_now' | t }}
+</button>
+{% endif %}
+{% if block.settings.show_paypal %}
+{% include 'paypal', available: available %}
+{% endif %}
+
+{%- comment -%} 提示文案 {%- endcomment -%}
+<div class="product-info__tips empty:tw-hidden tw-mt-2 tw-text-center tw-text-sm tw-leading-1.3 tw-opacity-70 lg:tw-mt-3" data-unavailable="{{ 'i18n.product.product_detail.product_unavailable' | t }}" data-out-of-stock="{{ 'i18n.product.product_detail.out_of_stock' | t }}">{% if isSelectedVariant %}{% if selectedVariantId and selectedVariantId == nil %}{{ 'i18n.product.product_detail.product_unavailable' | t }}{% else %}{% unless available and product.available %}{{ 'i18n.product.product_detail.out_of_stock' | t }}{% endunless %}{% endif %}{% else %}{% unless product.available %}{{ 'i18n.product.product_detail.out_of_stock' | t }}{% endunless %}{% endif %}</div>
+</div>
+{% endif %}
+
+{% when "sharing" %}
+{% assign share_title = product.title %}
+{% assign share_permalink = product.url %}
+{% assign share_image = product.image.src %}
+{% assign share_icon_class = 'tw-text-current tw-no-underline tw-flex tw-justify-center tw-items-center dj_skin_text' %}
+<div {{block.shoplaza_attributes}} class="product-info__social-sharing tw-mt-8">
+<div class="tw-text-xs tw-leading-[1.7] ">{{ 'i18n.product.product_detail.share_the_love' | t }}</div>
+<div class="product-info__social-sharing-wrapper tw-flex tw-items-center tw-pt-[6px] tw-space-x-5">
+<a target="_blank"
+data-track="social_share"
+href="//www.facebook.com/sharer.php?u={{ shop.url | append: share_permalink }}"
+class="{{share_icon_class}} share-facebook ">
+{% include 'icon_sharing_facebook', icon_width:"20px", icon_height:"20px" %}
+</a>
+<a target="_blank"
+data-track="social_share"
+href="//twitter.com/share?text={{ share_title | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}"
+class="{{share_icon_class}} share-twitter">
+{% include 'icon_sharing_twitter', icon_width:"20px", icon_height:"20px" %}
+</a>
+<a target="_blank"
+data-track="social_share"
+href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | img_url: '1024x1024' }}&amp;description={{ share_title | url_param_escape }}"
+class="{{share_icon_class}} share-pinterest">
+{% include 'icon_sharing_pinterest', icon_width:"20px", icon_height:"20px" %}
+</a>
+</div>
+</div>
+{% when "variant" %}
+{% assign has_variants = true %}
+{% include 'product_info_variants' %}
+{% when "label" %}
+{% if block.settings.label1 or block.settings.label2 %}
+<div {{block.shoplaza_attributes}} class="tw-pt-[6px] tw-flex tw-space-x-2">
+{% include 'product_info_label', label: block.settings.label1, ids: block.settings.ids1 %}
+{% include 'product_info_label', label: block.settings.label2, ids: block.settings.ids2 %}
+</div>
+{% endif %}
+{% when "info" %}
+{% if block.settings.show_sku or block.settings.show_weight or block.settings.show_barcode %}
+<div {{block.shoplaza_attributes}} class="tw-mt-5 tw-body-minus-2 tw-leading-1.3 tw-opacity-[0.85] tw-space-y-2">
+{% if block.settings.show_sku %}
+<div class="{% unless selectedVariant != nil and selectedVariant.sku != blank %}tw-hidden{% endunless %} product-info__header-sku">{{ 'i18n.product.product_detail.sku' | t | upcase }}: <span>{{ selectedVariant.sku }}</span></div>
+{% endif %}
+{% if block.settings.show_weight %}
+<div class="{% unless selectedVariant != nil and selectedVariant.weight > 0 %}tw-hidden{% endunless %} product-info__weight">{{ 'i18n.product.product_detail.weight' | t }}: <span>{{ selectedVariant.weight }}{{ selectedVariant.weight_unit }}</span></div>
+{% endif %}
+{% if block.settings.show_barcode %}
+<div class="{% unless selectedVariant != nil and selectedVariant.barcode != blank %}tw-hidden{% endunless %} product-info__barcode">{{ 'i18n.product.product_detail.barcode' | t }}: <span>{{ selectedVariant.barcode }}</span></div>
+{% endif %}
+{% if block.settings.show_inventory %}
+<div class="product-info__inventory {% unless selectedVariant != nil and selectedVariant.available_quantity > 0 %} tw-hidden {% endunless %}">
+{{ 'i18n.product.product_detail.product_inventory' | t }}: <span>{{ selectedVariant.available_quantity }}</span>
+</div>
+{% endif %}
+</div>
+{% endif %}
+{% when 'estimated_delivery_time' %}
+{% include 'product_delivery_time', item: block %}
+{% when 'free_shipping' %}
+{% include 'product_free_shipping', item: block %}
+{% when 'current_inventory' %}
+{% include 'product_current_inventory', item: block, available: product.available %}
+{% when 'current_viewers' %}
+{% include 'product_current_viewer', item: block %}
+{% when 'desc' %}
+<div {{block.shoplaza_attributes}} class="product-info_con"> {% include 'product_description_contain', item: block , page_id: block.settings.custom.id %} </div>
+{% when 'custom' %}
+<div {{block.shoplaza_attributes}} class="product-info_con"> {% include 'product_description_contain', item: block , page_id: block.settings.custom.id %} </div>
+{% comment %} sales_points {% endcomment %}
+{% when 'sales_points' %}
+{% include 'sales_points', class: 'product-info__block tw-my-6' %}
+{% endcase %}
+{% endfor %}
+{% unless has_variants %}
+{% include 'product_info_variants', class: "tw-hidden" %}
+{% endunless %}
+</div>
